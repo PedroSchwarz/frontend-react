@@ -1,14 +1,18 @@
 import React from 'react'
-import './App.scss'
+import InjectionProvider from './contexts/InjectionContext'
+import Posts from './features/posts/presentation/pages/Posts'
 
 const App: React.FC = () => {
-	const logoMoovin =
-		'https://cdn.moovin.com.br/project/manager-panel/img/logo-moovin.svg'
+	// const logoMoovin =
+	// 	'https://cdn.moovin.com.br/project/manager-panel/img/logo-moovin.svg'
 
 	return (
-		<div className='App'>
-			<img alt='Logo da Moovin' src={logoMoovin} />
-		</div>
+		<InjectionProvider>
+			<div>
+				{/* <img alt='Logo da Moovin' src={logoMoovin} /> */}
+				<Posts />
+			</div>
+		</InjectionProvider>
 	)
 }
 
