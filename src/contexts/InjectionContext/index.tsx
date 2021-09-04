@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
 import GetPosts from "../../features/posts/domain/usecases/GetPosts";
-import buildPostsModule from "../PostsModule";
+import buildPostsModule from "../PostsModuleInjection";
 
 type InjectionContainer = {
     getPosts: GetPosts;

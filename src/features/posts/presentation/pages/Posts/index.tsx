@@ -1,35 +1,57 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { InjectionContext } from '../../../../../contexts/InjectionContext';
+import { PagesContext } from '../../../../../contexts/PagesContext';
 import { Post } from '../../../domain/entities/Post';
+import PostsList from '../../widgets/PostsList';
+import { ErrorCard, Loading, Main } from './styles';
 
 const Posts: React.FC = () => {
     const { getPosts: usecase } = useContext(InjectionContext);
-
-    const [currentPage, setCurrentPage] = useState<number>(1);
+    const { currentPage, setTotalPages } = useContext(PagesContext);
     const [posts, setPosts] = useState<Post[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>('');
 
     useEffect(() => {
-        const loadPosts = async () => {
-            try {
-                const posts = await usecase.execute(currentPage);
-                setPosts(posts);
-            } catch (e) {
-                console.log(e);
-            }
+        handleExecuteUseCase();
+    }, [currentPage, usecase]);
+
+    const handleExecuteUseCase = async () => {
+        setLoading(true);
+        try {
+            const result = await usecase.execute(currentPage);
+            setPosts(result.posts);
+            setTotalPages(result.totalPages);
+            setError('');
+        } catch (e: any) {
+            setError(e.message);
+        } finally {
+            setLoading(false);
         }
-        loadPosts();
-    }, [currentPage]);
+    }
 
     return (
-        <div>
-            <ul>
-                {
-                    posts.length > 0 &&
-                    posts.map(el => <li key={el.id}>{ el.title }</li>)
-                }
-            </ul>
-            <button type="submit" onClick={() => setCurrentPage(currentPage + 1)}>next</button>
-        </div>
+        <Main>
+            {
+                loading &&
+                <Loading>
+                    <p>Carregando...</p>
+                </Loading>
+            }
+            {
+                posts.length > 0 &&
+                <PostsList posts={posts} />
+            }
+            {
+                !loading && error &&
+                <ErrorCard>
+                    <p>{ error }</p>
+                    <ErrorCard.TryAgainButton onClick={handleExecuteUseCase}>
+                        Tentar Novamente
+                    </ErrorCard.TryAgainButton>
+                </ErrorCard>
+            }
+        </Main>
     )
 };
 

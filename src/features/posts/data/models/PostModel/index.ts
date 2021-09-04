@@ -2,8 +2,19 @@ import { Post } from "../../../domain/entities/Post"
 
 export type APIResult = {
     code: number;
-    meta: any;
+    meta: Meta;
     data: PostModel[];
+}
+
+export type Meta = {
+    pagination: Pagination;
+}
+
+export type Pagination = {
+    total: number;
+    pages: number;
+    page: number;
+    limit: number;
 }
 
 export class PostModel {
