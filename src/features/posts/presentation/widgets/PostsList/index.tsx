@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useCallback, memo } from 'react'
 import { useSelector } from 'react-redux';
 import { POSTS_STATE } from '../../stores/Posts/reducer';
 import PagesController from '../PagesController';
@@ -8,9 +8,9 @@ import { Card, List } from './styles';
 const PostsList: React.FC = () => {
     const { posts } = useSelector<{posts: POSTS_STATE}, POSTS_STATE>(state => state.posts);
 
-    const handleRenderPostItems = (): ReactNode[] => {
+    const handleRenderPostItems = useCallback((): ReactNode[] => {
         return posts.map(el => <PostItem key={el.id} post={el} />);
-    }
+    }, [posts]);
 
     return (
         <Card>
@@ -33,4 +33,4 @@ const PostsList: React.FC = () => {
     );
 };
 
-export default PostsList;
+export default memo(PostsList);

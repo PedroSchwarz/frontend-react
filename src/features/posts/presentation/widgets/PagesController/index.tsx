@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useCallback, memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { pagesActions } from '../../stores/Pages';
 import { PAGES_STATE } from '../../stores/Pages/reducer';
@@ -9,7 +9,7 @@ const PagesController: React.FC = () => {
     const { totalPages, currentPage } = useSelector<{pages: PAGES_STATE}, PAGES_STATE>(state => state.pages);
     const pages = Array.from(new Array(totalPages).keys()).map(el => el + 1);
 
-    const handleRenderPageIndicators = (): ReactNode[] => {
+    const handleRenderPageIndicators = useCallback((): ReactNode[] => {
         return pages
         .filter(el => el === currentPage - 1 || el === currentPage || el === currentPage + 1)
         .map(el => {
@@ -19,17 +19,17 @@ const PagesController: React.FC = () => {
             </PageIndicator>
             );
         });
-    }
+    }, [currentPage]);
     
-    const handlePreviousPage = (): void => {
+    const handlePreviousPage = useCallback(() => {
         if (currentPage === 1) return;
         else dispatch(pagesActions.previousPage());
-    }
+    }, [currentPage]);
 
-    const handleNextPage = (): void => {
+    const handleNextPage = useCallback(() => {
         if (currentPage === pages.length) return;
         else dispatch(pagesActions.nextPage());
-    }
+    }, [currentPage]);
 
     return (
         <Controller>
@@ -46,4 +46,4 @@ const PagesController: React.FC = () => {
     );
 }
 
-export default PagesController;
+export default memo(PagesController);

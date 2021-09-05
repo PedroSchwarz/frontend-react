@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useCallback, memo } from 'react';
 import { InjectionContext } from '../../../../../di/InjectionContext';
 import PostsList from '../../widgets/PostsList';
 import { ErrorCard, Loading, Main } from './styles';
@@ -16,11 +16,11 @@ const Posts: React.FC = () => {
 
     useEffect(() => {
         handleExecuteUseCase();
-    }, [currentPage, usecase]);
+    }, [currentPage]);
 
-    const handleExecuteUseCase = async () => {
+    const handleExecuteUseCase = useCallback(async () => {
         dispatch(postsActions.fetchPosts(usecase));
-    }
+    }, []);
 
     return (
         <Main>
@@ -47,4 +47,4 @@ const Posts: React.FC = () => {
     )
 };
 
-export default Posts;
+export default memo(Posts);
