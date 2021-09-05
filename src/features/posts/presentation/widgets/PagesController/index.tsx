@@ -1,9 +1,12 @@
-import React, { useContext, ReactNode } from 'react'
-import { PagesContext } from '../../../../../contexts/PagesContext';
+import React, { ReactNode } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { pagesActions } from '../../stores/Pages';
+import { PAGES_STATE } from '../../stores/Pages/reducer';
 import { ArrowButton, Controller, PageIndicator } from './styles';
 
 const PagesController: React.FC = () => {
-    const { currentPage, setCurrentPage, totalPages } = useContext(PagesContext);
+    const dispatch = useDispatch();
+    const { totalPages, currentPage } = useSelector<{pages: PAGES_STATE}, PAGES_STATE>(state => state.pages);
     const pages = Array.from(new Array(totalPages).keys()).map(el => el + 1);
 
     const handleRenderPageIndicators = (): ReactNode[] => {
@@ -20,12 +23,12 @@ const PagesController: React.FC = () => {
     
     const handlePreviousPage = (): void => {
         if (currentPage === 1) return;
-        else setCurrentPage(currentPage - 1);
+        else dispatch(pagesActions.previousPage());
     }
 
     const handleNextPage = (): void => {
         if (currentPage === pages.length) return;
-        else setCurrentPage(currentPage + 1);
+        else dispatch(pagesActions.nextPage());
     }
 
     return (

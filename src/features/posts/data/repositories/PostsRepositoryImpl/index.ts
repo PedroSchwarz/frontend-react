@@ -14,7 +14,7 @@ export default class PostsRepositoryImpl implements PostsRepository {
             const posts = data.data.map(el => new PostModel(el.id, el.user_id, el.title, el.body).toPost());
             const totalPages = data.meta.pagination.pages;
 
-            this.local.cachePostsResult({ posts, totalPages });
+            this.local.cachePostsResult({ posts, totalPages: 1 });
 
             return {
                 posts,

@@ -1,14 +1,12 @@
 import React, { ReactNode } from 'react'
-import { Post } from '../../../domain/entities/Post';
+import { useSelector } from 'react-redux';
+import { POSTS_STATE } from '../../stores/Posts/reducer';
 import PagesController from '../PagesController';
 import PostItem from '../PostItem';
 import { Card, List } from './styles';
 
-type PostsListProps = {
-    posts: Post[];
-};
-
-const PostsList: React.FC<PostsListProps> = ({ posts }) => {
+const PostsList: React.FC = () => {
+    const { posts } = useSelector<{posts: POSTS_STATE}, POSTS_STATE>(state => state.posts);
 
     const handleRenderPostItems = (): ReactNode[] => {
         return posts.map(el => <PostItem key={el.id} post={el} />);
